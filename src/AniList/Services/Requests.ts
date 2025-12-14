@@ -22,13 +22,15 @@ export default async function makeRequest<ResponseType, QueryVariablesType = nev
   };
 
   if (needsAuth) {
-    const token = String(Application.getSecureState("session"));
+    const token = Application.getSecureState("session");
 
-    if (token == undefined) {
+    if (!token || token === "undefined" || token === "null") {
       throw new Error("You are not authenticated, please log in through the AniList settings");
     }
 
-    const tokenParts = token.split(".");
+    const tokenString = String(token);
+
+    const tokenParts = tokenString.split(".");
     if (!tokenParts[1]) {
       throw new Error("Invalid authentication token");
     }
@@ -49,7 +51,7 @@ export default async function makeRequest<ResponseType, QueryVariablesType = nev
       );
     }
 
-    request.headers.Authorization = "Bearer " + token;
+    request.headers.Authorization = "Bearer " + tokenString;
   }
 
   const [_, buffer] = await Application.scheduleRequest(request);

@@ -20,4 +20,4 @@ export default {
       github: "https://github.com/xdKinso",
     },
   ],
-} as SourceInfo;
+} satisfies SourceInfo;
