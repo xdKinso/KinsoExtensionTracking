@@ -89,7 +89,7 @@ export class DiscoverSectionImplementation implements DiscoverSectionProviding {
 
     const variables: DiscoverSectionsAndSearchVariables = {
       page: metadata ?? 1,
-      sort: sort!,
+      sort: [sort!],
       countryOfOrigin: countryOfOrigin,
     };
 

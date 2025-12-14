@@ -21,6 +21,10 @@ export async function getItems<ResultItemType>(
     needsAuth,
     queryVariables,
   );
+  if (!json?.Page?.media) {
+    throw new Error("AniList returned an empty result set");
+  }
+
   const searchResults = json.Page.media;
 
   for (const searchResult of searchResults) {

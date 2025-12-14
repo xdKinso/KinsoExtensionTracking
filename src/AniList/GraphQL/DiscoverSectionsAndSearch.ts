@@ -96,7 +96,7 @@ export type DiscoverSectionsAndSearchVariables = {
   tagIn?: string[];
   tagNotIn?: string[];
   sourceIn?: string[];
-  sort: string;
+  sort: string[];
 };
 
 export type DiscoverSectionsAndSearch = {
