@@ -21,13 +21,18 @@ export async function getItems<ResultItemType>(
     needsAuth,
     queryVariables,
   );
-  if (!json?.Page?.media) {
+  if (!json?.Page || !Array.isArray(json.Page.media)) {
+    console.error("[AniList] Unexpected response shape", JSON.stringify(json));
     throw new Error("AniList returned an empty result set");
   }
 
   const searchResults = json.Page.media;
 
   for (const searchResult of searchResults) {
+    if (!searchResult) {
+      console.warn("[AniList] Skipping empty media entry", searchResults);
+      continue;
+    }
     let title = "";
     switch (searchResult.format) {
       case "NOVEL":
