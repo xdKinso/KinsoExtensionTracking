@@ -25,8 +25,15 @@ export class AniListExtension implements AniListImplementation {
   mainInterceptor = new AniListInterceptor("main");
 
   async initialise(): Promise<void> {
-    this.mainRateLimiter.registerInterceptor();
-    this.mainInterceptor.registerInterceptor();
+    try {
+      console.log("[AniList] initialise");
+      this.mainRateLimiter.registerInterceptor();
+      this.mainInterceptor.registerInterceptor();
+      console.log("[AniList] initialise complete");
+    } catch (error) {
+      console.error("[AniList] initialise error", error);
+      throw error;
+    }
   }
 
   // Methods are added via mixins - declare them to satisfy TypeScript
