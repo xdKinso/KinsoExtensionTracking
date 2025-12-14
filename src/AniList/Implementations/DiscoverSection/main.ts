@@ -12,44 +12,55 @@ import { getItems } from "../helper";
 
 export class DiscoverSectionImplementation implements DiscoverSectionProviding {
   async getDiscoverSections(): Promise<DiscoverSection[]> {
-    console.log("[AniList] getDiscoverSections called");
-    console.log("[AniList] MediaSort:", MediaSort);
-    console.log("[AniList] CountryCode:", CountryCode);
+    try {
+      console.log("[AniList] getDiscoverSections called");
+      console.log("[AniList] MediaSort:", MediaSort);
+      console.log("[AniList] CountryCode:", CountryCode);
 
-    const trending_now: DiscoverSection = {
-      id: "trending-now",
-      title: "Trending Now",
-      type: DiscoverSectionType.featured,
-    };
+      const trending_now: DiscoverSection = {
+        id: "trending-now",
+        title: "Trending Now",
+        type: DiscoverSectionType.featured,
+      };
 
-    const all_time_popular: DiscoverSection = {
-      id: "all-time-popular",
-      title: "All Time Popular",
-      type: DiscoverSectionType.prominentCarousel,
-    };
+      const all_time_popular: DiscoverSection = {
+        id: "all-time-popular",
+        title: "All Time Popular",
+        type: DiscoverSectionType.prominentCarousel,
+      };
 
-    const popular_manga: DiscoverSection = {
-      id: "popular-manga",
-      title: "Popular Manga",
-      type: DiscoverSectionType.simpleCarousel,
-    };
+      const popular_manga: DiscoverSection = {
+        id: "popular-manga",
+        title: "Popular Manga",
+        type: DiscoverSectionType.simpleCarousel,
+      };
 
-    const popular_manhwa: DiscoverSection = {
-      id: "popular-manhwa",
-      title: "Popular Manhwa",
-      type: DiscoverSectionType.simpleCarousel,
-    };
+      const popular_manhwa: DiscoverSection = {
+        id: "popular-manhwa",
+        title: "Popular Manhwa",
+        type: DiscoverSectionType.simpleCarousel,
+      };
 
-    const top_100_manga: DiscoverSection = {
-      id: "top-100-manga",
-      title: "Top 100 Manga",
-      type: DiscoverSectionType.prominentCarousel,
-    };
+      const top_100_manga: DiscoverSection = {
+        id: "top-100-manga",
+        title: "Top 100 Manga",
+        type: DiscoverSectionType.prominentCarousel,
+      };
 
-    const sections = [trending_now, all_time_popular, popular_manga, popular_manhwa, top_100_manga];
+      const sections = [
+        trending_now,
+        all_time_popular,
+        popular_manga,
+        popular_manhwa,
+        top_100_manga,
+      ];
 
-    console.log("[AniList] Returning sections:", sections);
-    return sections;
+      console.log("[AniList] Returning sections:", sections);
+      return sections;
+    } catch (error) {
+      console.error("[AniList] getDiscoverSections error", error);
+      return [];
+    }
   }
 
   async getDiscoverSectionItems(
@@ -106,7 +117,7 @@ export class DiscoverSectionImplementation implements DiscoverSectionProviding {
       return result;
     } catch (error) {
       console.error("[AniList] Error in getDiscoverSectionItems:", error);
-      throw error;
+      return { items: [], metadata: undefined };
     }
   }
 }

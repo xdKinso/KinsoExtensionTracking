@@ -22,8 +22,8 @@ export async function getItems<ResultItemType>(
     queryVariables,
   );
   if (!json?.Page || !Array.isArray(json.Page.media)) {
-    console.error("[AniList] Unexpected response shape", JSON.stringify(json));
-    throw new Error("AniList returned an empty result set");
+    console.warn("[AniList] Unexpected response shape", JSON.stringify(json));
+    return { items: [], metadata: undefined };
   }
 
   const searchResults = json.Page.media;
