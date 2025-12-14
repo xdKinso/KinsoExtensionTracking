@@ -38,14 +38,15 @@ export async function getItems<ResultItemType>(
     }
 
     title +=
-      searchResult.title.english ??
-      searchResult.title.romaji ??
-      searchResult.title.native ??
+      searchResult.title?.english ??
+      searchResult.title?.romaji ??
+      searchResult.title?.native ??
       "No Title";
     if (
       getSynonymsSetting() == true &&
+      Array.isArray(searchResult.synonyms) &&
       searchResult.synonyms.length > 0 &&
-      !searchResult.title.english
+      !searchResult.title?.english
     ) {
       title += " / " + searchResult.synonyms[0];
     }
@@ -88,13 +89,17 @@ export async function getItems<ResultItemType>(
     items.push({
       mangaId: searchResult.id.toString(),
       title,
-      imageUrl: searchResult.coverImage.large,
+      imageUrl:
+        searchResult.coverImage?.large ??
+        searchResult.coverImage?.extraLarge ??
+        searchResult.coverImage?.medium ??
+        "",
       contentRating,
       subtitle,
     } as ResultItemType);
   }
 
-  metadata = json.Page.pageInfo.hasNextPage ? (metadata ?? 1) + 1 : undefined;
+  metadata = json.Page.pageInfo?.hasNextPage ? (metadata ?? 1) + 1 : undefined;
 
   return {
     items,
