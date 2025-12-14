@@ -1,0 +1,7 @@
+.Ds_Store
+/node_modules
+/bundles
+
+/.idea
+/.vscode
+ngrok.exe
