@@ -21,10 +21,13 @@ export async function getItems<ResultItemType>(
     needsAuth,
     queryVariables,
   );
+  console.log("[AniList] getItems queryVariables", JSON.stringify(queryVariables));
   if (!json?.Page || !Array.isArray(json.Page.media)) {
     console.warn("[AniList] Unexpected response shape", JSON.stringify(json));
     return { items: [], metadata: undefined };
   }
+
+  console.log("[AniList] getItems media length", json.Page.media.length);
 
   const searchResults = json.Page.media;
 
