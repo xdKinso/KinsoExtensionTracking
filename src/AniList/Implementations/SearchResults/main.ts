@@ -252,7 +252,9 @@ export class SearchResultsImplementation
       variables.search = query.title;
     }
 
-    for (const filter of query.filters) {
+    const filters = query.filters ?? [];
+
+    for (const filter of filters) {
       switch (filter.id) {
         case "genres": {
           const genres = (filter.value ?? {}) as Record<string, "included" | "excluded">;
