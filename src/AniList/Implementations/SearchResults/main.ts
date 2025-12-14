@@ -26,6 +26,7 @@ export class SearchResultsImplementation
   implements SearchResultsProviding
 {
   async getSearchFilters(): Promise<SearchFilter[]> {
+    console.log("[AniList] getSearchFilters");
     let genres: Genres;
     let tags: Tags;
 
@@ -253,6 +254,8 @@ export class SearchResultsImplementation
     }
 
     const filters = query.filters ?? [];
+
+    console.log("[AniList] getSearchResults query", query.title, "metadata", metadata, "sort", variables.sort, "filters", filters?.length);
 
     for (const filter of filters) {
       switch (filter.id) {

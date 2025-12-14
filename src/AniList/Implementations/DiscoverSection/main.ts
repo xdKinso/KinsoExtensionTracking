@@ -14,8 +14,8 @@ export class DiscoverSectionImplementation implements DiscoverSectionProviding {
   async getDiscoverSections(): Promise<DiscoverSection[]> {
     try {
       console.log("[AniList] getDiscoverSections called");
-      console.log("[AniList] MediaSort:", MediaSort);
-      console.log("[AniList] CountryCode:", CountryCode);
+      console.log("[AniList] MediaSort keys:", Object.keys(MediaSort));
+      console.log("[AniList] CountryCode keys:", Object.keys(CountryCode));
 
       const trending_now: DiscoverSection = {
         id: "trending-now",
