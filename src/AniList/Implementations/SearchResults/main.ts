@@ -245,7 +245,7 @@ export class SearchResultsImplementation
 
     const variables: DiscoverSectionsAndSearchVariables = {
       page: metadata ?? 1,
-      sort: sortingOption!.id,
+      sort: (sortingOption?.id ?? MediaSort.SEARCH_MATCH.id) as string,
     };
 
     if (query.title) {

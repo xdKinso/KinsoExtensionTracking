@@ -1,6 +1,26 @@
 import type { Request, Response } from "../GraphQL/General";
 import type { JwtPayload } from "../GraphQL/Viewer";
 
+function decodeBase64(payload: string): string {
+  // Paperback runtime does not guarantee Node's Buffer, so use a cross-runtime decoder
+  if (typeof Application.base64Decode === "function") {
+    return Application.base64Decode(payload);
+  }
+
+  if (typeof atob === "function") {
+    return atob(payload);
+  }
+
+  // Last resort: try Buffer if it exists (web builds polyfill it)
+  // eslint-disable-next-line no-undef
+  if (typeof Buffer !== "undefined") {
+    // eslint-disable-next-line no-undef
+    return Buffer.from(payload, "base64").toString("utf-8");
+  }
+
+  throw new Error("No base64 decoder available in this environment");
+}
+
 const GRAPHQL_ENDPOINT = "https://graphql.anilist.co";
 
 export default async function makeRequest<ResponseType, QueryVariablesType = never>(
@@ -34,7 +54,7 @@ export default async function makeRequest<ResponseType, QueryVariablesType = nev
     if (!tokenParts[1]) {
       throw new Error("Invalid authentication token");
     }
-    const payload = JSON.parse(Buffer.from(tokenParts[1], "base64").toString()) as JwtPayload;
+    const payload = JSON.parse(decodeBase64(tokenParts[1])) as JwtPayload;
 
     if (Number(payload.exp) < new Date().valueOf() / 1000) {
       Application.setSecureState(null, "session");
@@ -58,17 +78,13 @@ export default async function makeRequest<ResponseType, QueryVariablesType = nev
   const data = Application.arrayBufferToUTF8String(buffer);
   const unkownResponse: unknown = JSON.parse(data);
 
-  if (
-    unkownResponse == undefined ||
-    typeof unkownResponse !== "object" ||
-    !("data" in unkownResponse || "error" in unkownResponse)
-  ) {
+  if (unkownResponse == undefined || typeof unkownResponse !== "object") {
     throw new Error(`Failed to parse JSON object: ${String(unkownResponse)}`);
   }
 
   const response = unkownResponse as Response;
 
-  if (response.errors != undefined) {
+  if (Array.isArray(response.errors) && response.errors.length > 0) {
     let errorMessages = "";
     for (let i = 0; i < response.errors.length; i++) {
       if (i != 0) {
@@ -82,6 +98,10 @@ export default async function makeRequest<ResponseType, QueryVariablesType = nev
     }
 
     throw new Error(errorMessages);
+  }
+
+  if (response.data == undefined) {
+    throw new Error("AniList returned an empty response body");
   }
 
   return response.data as ResponseType;

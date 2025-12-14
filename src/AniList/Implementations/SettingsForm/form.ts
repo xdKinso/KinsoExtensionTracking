@@ -196,7 +196,20 @@ class ProfileViewForm extends Form {
       throw new Error("Invalid session token");
     }
 
-    const payload = JSON.parse(Buffer.from(tokenParts[1], "base64").toString()) as JwtPayload;
+    const payload = JSON.parse(
+      typeof Application.base64Decode === "function"
+        ? Application.base64Decode(tokenParts[1])
+        : typeof atob === "function"
+          ? atob(tokenParts[1])
+          : (() => {
+              // eslint-disable-next-line no-undef
+              if (typeof Buffer !== "undefined") {
+                // eslint-disable-next-line no-undef
+                return Buffer.from(tokenParts[1], "base64").toString("utf-8");
+              }
+              throw new Error("No base64 decoder available in this environment");
+            })(),
+    ) as JwtPayload;
 
     const rows: FormItemElement<unknown>[] = [];
     for (const [key, value] of Object.entries(payload)) {

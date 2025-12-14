@@ -100,7 +100,7 @@ export class MangaImplementation implements MangaProviding {
 
     const tags: Tag[] = [];
     for (const tag of mangaDetails.tags) {
-      genres.push({
+      tags.push({
         id: tag.id.toString().replaceAll(" ", "_").toLowerCase(),
         title: tag.name,
       });
