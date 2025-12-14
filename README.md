@@ -11,7 +11,7 @@ Integration with anilist.co for tracking and collection management.
 ## Installation
 
 Add this repository to Paperback:
-https://xdkinso.github.io/tracker-extensions/
+https://xdkinso.github.io/KinsoExtensionTracking)
 
 ## Developer
 
